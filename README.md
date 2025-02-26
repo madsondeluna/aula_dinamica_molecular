@@ -224,6 +224,7 @@ gmx hbond -s md.tpr -f md.xtc -num hbond.xvg
 - [GROMACS Manual](http://www.gromacs.org/Documentation)
 - [MD Tutorials – Lysozyme in Water](https://www.mdtutorials.com/gmx/lysozyme/)
 - Lemkul, J. A. (2018). GROMACS Tutorial.
+- A Making-it-rain de Pablo R. Arantes (@pablitoarantes), Marcelo D. Polêto (@mdpoleto), Conrado Pedebos (@ConradoPedebos) e Rodrigo Ligabue-Braun (@ligabue_braun).
 
 ---
 
