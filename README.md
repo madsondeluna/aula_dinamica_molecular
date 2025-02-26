@@ -177,21 +177,6 @@ gmx hbond -s md.tpr -f md.xtc -num hbond.xvg
 
 ---
 
-## Estrutura do Projeto
-
-```
-.
-├── 1AKI.pdb
-│   ├── ions.mdp
-│   ├── minim.mdp
-│   ├── nvt.mdp
-│   ├── npt.mdp
-│   ├── md.mdp
-├── README.md
-```
-
----
-
 ## Como Executar o Tutorial
 
 1. **Clone o repositório:**
