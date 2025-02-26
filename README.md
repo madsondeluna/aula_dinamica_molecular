@@ -69,7 +69,7 @@ conda install -c bioconda gromacs
 ### 1. Preparação do Sistema
 
 ```bash
-gmx pdb2gmx -f 1AKI.pdb -o 1AKI_processed.gro -p topol.top -i posre.itp -water spce -ff oplsaa
+gmx pdb2gmx -f 1AKI.pdb -o 1AKI_processed.gro -p topol.top -water spce 
 ```
 - Converte o arquivo PDB para o formato GROMACS e gera os arquivos de topologia e restrições.
 
