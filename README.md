@@ -182,7 +182,6 @@ gmx hbond -s md.tpr -f md.xtc -num hbond.xvg
 ```
 .
 ├── 1AKI.pdb
-├── mdp/
 │   ├── ions.mdp
 │   ├── minim.mdp
 │   ├── nvt.mdp
