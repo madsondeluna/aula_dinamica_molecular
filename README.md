@@ -13,7 +13,7 @@ The Journal of Physical Chemistry B 2024 128 (39), 9418-9435.
 DOI: 10.1021/acs.jpcb.4c04901
 ``
 
-PDF disponível em: lemkul-2024-introductory-tutorials-for-simulating-protein-dynamics-with-gromacs.pdf
+PDF disponível em: https://github.com/madsondeluna/aula_dinamica_molecular/blob/main/lemkul-2024-introductory-tutorials-for-simulating-protein-dynamics-with-gromacs.pdf
 
 ---
 
