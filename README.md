@@ -222,7 +222,12 @@ gmx hbond -s md.tpr -f md.xtc -num hbond.xvg
 
 - [GROMACS Manual](http://www.gromacs.org/Documentation)
 - [MD Tutorials – Lysozyme in Water](https://www.mdtutorials.com/gmx/lysozyme/)
-- Um agradecimento especial ao projeto Making-It-Rain de Pablo R. Arantes (@pablitoarantes), Marcelo D. Polêto (@mdpoleto), Conrado Pedebos (@ConradoPedebos) e Rodrigo Ligabue-Braun (@ligabue_braun) que permitiu a execução dos protocolos na nuvem com o Colab. 
+
+---
+
+## Agradedicomentos
+
+- Um agradecimento especial ao projeto Making-It-Rain de Pablo R. Arantes (@pablitoarantes), Marcelo D. Polêto (@mdpoleto), Conrado Pedebos (@ConradoPedebos) e Rodrigo Ligabue-Braun (@ligabue_braun) que permitiu a execução dos protocolos na nuvem com o Colab.
 
 ---
 
