@@ -200,9 +200,9 @@ gmx hbond -s md.tpr -f md.xtc -num hbond.xvg
    cd aula_dinamica_molecular
    ```
 3. **Execute os scripts disponíveis para automação do processo.**
-  ```bash
-  gmx (comandos acima)
-   ```
+    ```bash
+    gmx (comandos acima)
+     ```
 ---
 
 ## Possíveis Erros e Soluções
