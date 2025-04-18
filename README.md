@@ -6,8 +6,7 @@ Este repositório contém um tutorial completo e detalhado para a simulação de
 
 Deixo um artigo de revisão sobre tutoriais de simulações em Dinâmica Molecular, como material de apoio. Recomento fortemente a leitura do material. 
 
-`` 
-Introductory Tutorials for Simulating Protein Dynamics with GROMACS. 
+``Introductory Tutorials for Simulating Protein Dynamics with GROMACS. 
 Justin A. Lemkul.
 The Journal of Physical Chemistry B 2024 128 (39), 9418-9435.
 DOI: 10.1021/acs.jpcb.4c04901
