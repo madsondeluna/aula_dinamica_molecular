@@ -201,6 +201,7 @@ gmx mdrun -deffnm md_0_1 -v
 ### 8. Pós-processamento e Análise de Resultados
 
 > **Nota sobre os Exemplos de Imagens:** As imagens utilizadas como exemplos nesta seção foram retiradas do artigo: Andrade, F.A.d.; Luna-Aragão, M.A.d.; Ferreira, J.D.C.; Souza, F.F.; Rocha Oliveira, A.C.d.; Costa, A.F.d.; Aragão, F.J.L.; Santos-Silva, C.A.d.; Benko-Iseppon, A.M.; Pandolfi, V. *Deciphering Cowpea Resistance to Potyvirus: Assessment of eIF4E Gene Mutations and Their Impact on the eIF4E-VPg Protein Interaction*. Viruses **2025**, *17*, 1050. https://doi.org/10.3390/v17081050. 
+
 > Este trabalho utilizou técnicas de genômica, modelagem e dinâmica molecular, docking e análises avançadas de interações moleculares, sendo um excelente exemplo de aplicações das metodologias abordadas nesta aula. O artigo pode ser acessado em: https://www.mdpi.com/1999-4915/17/8/1050
 
 Analisa a trajetória gerada (`md_0_1.xtc`).
