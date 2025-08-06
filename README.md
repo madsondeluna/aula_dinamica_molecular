@@ -132,6 +132,8 @@ Definimos uma caixa de simulação periódica e a preenchemos com moléculas de 
 ```bash
 # Define uma caixa cúbica a 1.0 nm da superfície da proteína.
 gmx editconf -f model_processed.gro -o model_newbox.gro -c -d 1.0 -bt cubic
+```
+
 ```bash
 # Preenche a caixa com moléculas de água.
 gmx solvate -cp model_newbox.gro -cs spc216.gro -o model_solv.gro -p topol.top
