@@ -9,7 +9,7 @@ Deixo um artigo de revisão sobre tutoriais de simulações em Dinâmica Molecul
 ```
 Lemkul, J. A. Introductory Tutorials for Simulating Protein Dynamics with GROMACS. J. Phys. Chem. B 2024, 128 (39), 9418-9435. DOI: 10.1021/acs.jpcb.4c04901
 ```
-Disponível para leitura em: [GitHub deste tutorial](https://github.com/madsondeluna/aula_dinamica_molecular/blob/main/lemkul-2024-introductory-tutorials-for-simulating-protein-dynamics-with-gromacs.pdf).*
+Disponível para leitura em [PDF](lemkul-2024-introductory-tutorials-for-simulating-protein-dynamics-with-gromacs.pdf).
 
 ---
 
