@@ -58,6 +58,8 @@ Antes de iniciar, certifique-se de ter os seguintes softwares instalados:
 - **Visualizador Molecular:** `VMD` ou `PyMOL` para inspeção de trajetórias.
 - **Arquivo PDB:** Estrutura da lisozima (ex: `1AKI.pdb` do Protein Data Bank).
 
+> Os arquivos para este tutorial podem ser baixados em: https://drive.google.com/drive/folders/1YwZ8mfGRjexE_2c2UjatHvi-CVYpM8uC?usp=drive_link
+
 Instale o GROMACS com:
 ```bash
 sudo apt install gromacs
