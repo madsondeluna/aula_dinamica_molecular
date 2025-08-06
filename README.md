@@ -80,15 +80,15 @@ Ao usar o `gmx pdb2gmx`, você selecionará um dos campos de força disponíveis
 
 O GROMACS utiliza uma variedade de tipos de arquivos com extensões específicas. Abaixo estão os mais comuns encontrados neste tutorial:
 
-- **.gro:** um arquivo de coordenadas de formato fixo com coordenadas dadas em unidades de nm.
-- **.pdb:** um arquivo de coordenadas de formato fixo usado pelo Protein Databank com coordenadas em unidades de Å.
-- **.top:** uma topologia do sistema, definindo o conteúdo completo de um sistema.
-- **.itp:** uma topologia "incluída", definindo um tipo de molécula específico, parâmetros auxiliares ou outras diretivas topológicas.
-- **.mdp:** arquivo de "parâmetros de dinâmica molecular" que especifica todas as configurações relevantes para realizar um cálculo ou simulação.
-- **.tpr:** um arquivo de entrada de execução binário que combina coordenadas, topologia, todos os parâmetros do campo de força associados e todas as configurações de entrada definidas no arquivo .mdp.
-- **.edr:** um arquivo binário contendo dados de energia do cálculo ou simulação.
-- **.xtc:** um arquivo de trajetória binário em formato compactado contendo informações de tempo, vetor da caixa e coordenadas.
-- **.trr:** um arquivo de trajetória de alta precisão contendo informações de tempo, vetor da caixa, coordenadas, velocidade e força.
+- **`.gro`:** um arquivo de coordenadas de formato fixo com coordenadas dadas em unidades de nm.
+- **`.pdb`:** um arquivo de coordenadas de formato fixo usado pelo Protein Databank com coordenadas em unidades de Å.
+- **`.top`:** uma topologia do sistema, definindo o conteúdo completo de um sistema.
+- **`.itp`:** uma topologia "incluída", definindo um tipo de molécula específico, parâmetros auxiliares ou outras diretivas topológicas.
+- **`.mdp`:** arquivo de "parâmetros de dinâmica molecular" que especifica todas as configurações relevantes para realizar um cálculo ou simulação.
+- **`.tpr`:** um arquivo de entrada de execução binário que combina coordenadas, topologia, todos os parâmetros do campo de força associados e todas as configurações de entrada definidas no arquivo .mdp.
+- **`.edr`:** um arquivo binário contendo dados de energia do cálculo ou simulação.
+- **`.xtc`:** um arquivo de trajetória binário em formato compactado contendo informações de tempo, vetor da caixa e coordenadas.
+- **`.trr`:** um arquivo de trajetória de alta precisão contendo informações de tempo, vetor da caixa, coordenadas, velocidade e força.
 
 ---
 
