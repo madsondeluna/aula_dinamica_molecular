@@ -227,6 +227,109 @@ gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 ```
 - **Seleção Interativa:** Escolha `1 Protein` para o primeiro grupo e `1 Protein` novamente para o segundo.
 
+#### 8.5 Visualização dos Resultados com Python
+
+Para uma análise mais completa, você pode usar Python para gerar gráficos dos arquivos `.xvg` gerados pelo GROMACS:
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Função para ler arquivos .xvg do GROMACS
+def read_xvg(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+    
+    # Remove linhas de comentário
+    data_lines = [line for line in lines if not line.startswith('#') and not line.startswith('@')]
+    
+    # Converte para numpy array
+    data = np.array([line.split() for line in data_lines], dtype=float)
+    return data
+
+# Configurações gerais dos gráficos
+plt.style.use('seaborn-v0_8')
+fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+fig.suptitle('Análise de Dinâmica Molecular - Lisozima', fontsize=16, fontweight='bold')
+
+# 1. RMSD (Root-Mean-Square Deviation)
+rmsd_data = read_xvg('rmsd.xvg')
+axes[0,0].plot(rmsd_data[:,0], rmsd_data[:,1], 'b-', linewidth=1.5)
+axes[0,0].set_xlabel('Tempo (ns)')
+axes[0,0].set_ylabel('RMSD (nm)')
+axes[0,0].set_title('RMSD do Backbone da Proteína')
+axes[0,0].grid(True, alpha=0.3)
+
+# 2. RMSF (Root-Mean-Square Fluctuation)
+rmsf_data = read_xvg('rmsf.xvg')
+axes[0,1].plot(rmsf_data[:,0], rmsf_data[:,1], 'r-', linewidth=1.5)
+axes[0,1].set_xlabel('Número do Resíduo')
+axes[0,1].set_ylabel('RMSF (nm)')
+axes[0,1].set_title('Flutuação por Resíduo (C-alpha)')
+axes[0,1].grid(True, alpha=0.3)
+
+# 3. Raio de Giração
+gyration_data = read_xvg('giracao.xvg')
+axes[1,0].plot(gyration_data[:,0], gyration_data[:,1], 'g-', linewidth=1.5)
+axes[1,0].set_xlabel('Tempo (ns)')
+axes[1,0].set_ylabel('Raio de Giração (nm)')
+axes[1,0].set_title('Raio de Giração da Proteína')
+axes[1,0].grid(True, alpha=0.3)
+
+# 4. Ligações de Hidrogênio
+hbond_data = read_xvg('hbond_intra.xvg')
+axes[1,1].plot(hbond_data[:,0], hbond_data[:,1], 'm-', linewidth=1.5)
+axes[1,1].set_xlabel('Tempo (ns)')
+axes[1,1].set_ylabel('Número de Ligações H')
+axes[1,1].set_title('Ligações de Hidrogênio Intramoleculares')
+axes[1,1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('analise_md_completa.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Análise estatística básica
+print("=== RESUMO ESTATÍSTICO ===")
+print(f"RMSD médio: {np.mean(rmsd_data[:,1]):.3f} ± {np.std(rmsd_data[:,1]):.3f} nm")
+print(f"Raio de giração médio: {np.mean(gyration_data[:,1]):.3f} ± {np.std(gyration_data[:,1]):.3f} nm")
+print(f"Ligações H médias: {np.mean(hbond_data[:,1]):.1f} ± {np.std(hbond_data[:,1]):.1f}")
+```
+
+#### 8.6 Interpretação dos Resultados
+
+**RMSD (Root-Mean-Square Deviation):**
+
+- Valores típicos para proteínas estáveis: 0.1-0.3 nm
+- Tendência crescente indica possível desnaturação
+- Plateau indica estabilização da estrutura
+
+![Exemplo RMSD](https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=RMSD+vs+Tempo)
+
+**RMSF (Root-Mean-Square Fluctuation):**
+
+- Loops e terminais: alta flexibilidade (>0.3 nm)
+- Folhas-β e α-hélices: baixa flexibilidade (<0.2 nm)
+- Picos indicam regiões móveis importantes
+
+![Exemplo RMSF](https://via.placeholder.com/600x400/2196F3/FFFFFF?text=RMSF+por+Resíduo)
+
+**Raio de Giração:**
+
+- Proteína compacta: ~1.4-1.6 nm para lisozima
+- Variações pequenas (<5%) indicam estabilidade
+- Aumentos significativos sugerem desdobramento
+
+![Exemplo Raio de Giração](https://via.placeholder.com/600x400/FF9800/FFFFFF?text=Raio+de+Giração+vs+Tempo)
+
+**Ligações de Hidrogênio:**
+
+- Lisozima: ~100-130 ligações H intramoleculares
+- Flutuações normais: ±10-15 ligações
+- Perdas significativas indicam instabilidade estrutural
+
+![Exemplo Ligações H](https://via.placeholder.com/600x400/9C27B0/FFFFFF?text=Ligações+H+vs+Tempo)
+
 ---
 
 ## Como Executar o Tutorial
