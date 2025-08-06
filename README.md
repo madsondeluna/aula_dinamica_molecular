@@ -115,6 +115,8 @@ O GROMACS utiliza uma variedade de tipos de arquivos com extensões específicas
 
 ### 1. Preparação da Topologia da Proteína
 
+![1](imagens/1.png)
+
 O primeiro passo é usar `gmx pdb2gmx` para ler o arquivo PDB (aqui chamado `model.pdb`), gerar uma topologia (`topol.top`) e um arquivo de coordenadas (`.gro`) compatível com o GROMACS.
 
 ```bash
@@ -129,10 +131,15 @@ gmx pdb2gmx -f model.pdb -o model_processed.gro -water spce -ignh
 
 Definimos uma caixa de simulação periódica e a preenchemos com moléculas de água.
 
+![2](imagens/2.png)
+
 ```bash
 # Define uma caixa cúbica a 1.0 nm da superfície da proteína.
 gmx editconf -f model_processed.gro -o model_newbox.gro -c -d 1.0 -bt cubic
 ```
+
+![3](imagens/3.png)
+
 
 ```bash
 # Preenche a caixa com moléculas de água.
@@ -140,6 +147,8 @@ gmx solvate -cp model_newbox.gro -cs spc216.gro -o model_solv.gro -p topol.top
 ```
 
 ### 3. Adição de Íons
+
+![4](imagens/4.png)
 
 Neutralizamos a carga do sistema e adicionamos íons para simular uma concentração fisiológica.
 
