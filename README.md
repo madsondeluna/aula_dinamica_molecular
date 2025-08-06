@@ -261,20 +261,6 @@ gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 
 *O gráfico mostra o número de ligações de hidrogênio intramoleculares ao longo do tempo. A linha preta representa a média móvel, que ajuda a identificar tendências. Flutuações são normais e indicam a dinâmica natural da proteína.*
 
-#### 8.5 Gerando os Gráficos de Exemplo
-
-Para gerar gráficos semelhantes aos mostrados acima com seus próprios dados, você pode usar o script Python incluído:
-
-```bash
-# Instale as dependências (se necessário)
-pip install matplotlib numpy
-
-# Execute o script para gerar os gráficos
-python gerar_graficos_secao8.py
-```
-
-Este script criará gráficos de exemplo para cada análise, que podem ser usados como referência para interpretar seus próprios resultados.
-
 #### 8.5 Interpretação dos Resultados
 
 **RMSD (Root-Mean-Square Deviation):**
