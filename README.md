@@ -15,24 +15,31 @@ Disponível para leitura em [PDF](https://pubs.acs.org/doi/pdf/10.1021/acs.jpcb.
 
 ## Índice
 
-- [Introdução](#introdução)
-- [Requisitos](#requisitos)
-- [Campos de Força (Force Fields)](#campos-de-força-force-fields)
-- [Tipos de Arquivos GROMACS](#tipos-de-arquivos-gromacs)
-- [Fluxo de Trabalho](#fluxo-de-trabalho)
-- [Detalhamento das Etapas](#detalhamento-das-etapas)
-  - [1. Preparação da Topologia da Proteína](#1-preparação-da-topologia-da-proteína)
-  - [2. Definição da Caixa e Solvatação](#2-definição-da-caixa-e-solvatação)
-  - [3. Adição de Íons](#3-adição-de-íons)
-  - [4. Minimização de Energia](#4-minimização-de-energia)
-  - [5. Equilibração NVT (Temperatura Constante)](#5-equilibração-nvt-temperatura-constante)
-  - [6. Equilibração NPT (Pressão Constante)](#6-equilibração-npt-pressão-constante)
-  - [7. Simulação Produtiva (MD)](#7-simulação-produtiva-md)
-  - [8. Pós-processamento e Análise de Resultados](#8-pós-processamento-e-análise-de-resultados)
-- [Como Executar o Tutorial](#como-executar-o-tutorial)
-- [Possíveis Erros e Soluções](#possíveis-erros-e-soluções)
-- [Referências](#referências)
-- [Licença](#licença)
+- [Simulação de Dinâmica Molecular da Lisozima com GROMACS](#simulação-de-dinâmica-molecular-da-lisozima-com-gromacs)
+  - [Índice](#índice)
+  - [Introdução](#introdução)
+  - [Requisitos](#requisitos)
+  - [Campos de Força (Force Fields)](#campos-de-força-force-fields)
+  - [Tipos de Arquivos GROMACS](#tipos-de-arquivos-gromacs)
+  - [Fluxo de Trabalho](#fluxo-de-trabalho)
+  - [Detalhamento das Etapas](#detalhamento-das-etapas)
+    - [1. Preparação da Topologia da Proteína](#1-preparação-da-topologia-da-proteína)
+    - [2. Definição da Caixa e Solvatação](#2-definição-da-caixa-e-solvatação)
+    - [3. Adição de Íons](#3-adição-de-íons)
+    - [4. Minimização de Energia](#4-minimização-de-energia)
+    - [5. Equilibração NVT (Temperatura Constante)](#5-equilibração-nvt-temperatura-constante)
+    - [6. Equilibração NPT (Pressão Constante)](#6-equilibração-npt-pressão-constante)
+    - [7. Simulação Produtiva (MD)](#7-simulação-produtiva-md)
+    - [8. Pós-processamento e Análise de Resultados](#8-pós-processamento-e-análise-de-resultados)
+      - [8.1 Cálculo do RMSF (Root-Mean-Square Fluctuation)](#81-cálculo-do-rmsf-root-mean-square-fluctuation)
+      - [8.2 Cálculo do RMSD (Root-Mean-Square Deviation)](#82-cálculo-do-rmsd-root-mean-square-deviation)
+      - [8.3 Cálculo do Raio de Giração (Radius of Gyration)](#83-cálculo-do-raio-de-giração-radius-of-gyration)
+      - [8.4 Cálculo do Número de Ligações de Hidrogênio](#84-cálculo-do-número-de-ligações-de-hidrogênio)
+      - [8.5 Interpretação dos Resultados](#85-interpretação-dos-resultados)
+  - [Como Executar o Tutorial](#como-executar-o-tutorial)
+  - [Possíveis Erros e Soluções](#possíveis-erros-e-soluções)
+  - [Referências](#referências)
+  - [Licença](#licença)
 
 ---
 
@@ -227,76 +234,7 @@ gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 ```
 - **Seleção Interativa:** Escolha `1 Protein` para o primeiro grupo e `1 Protein` novamente para o segundo.
 
-#### 8.5 Visualização dos Resultados com Python
-
-Para uma análise mais completa, você pode usar Python para gerar gráficos dos arquivos `.xvg` gerados pelo GROMACS:
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-
-# Função para ler arquivos .xvg do GROMACS
-def read_xvg(filename):
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-    
-    # Remove linhas de comentário
-    data_lines = [line for line in lines if not line.startswith('#') and not line.startswith('@')]
-    
-    # Converte para numpy array
-    data = np.array([line.split() for line in data_lines], dtype=float)
-    return data
-
-# Configurações gerais dos gráficos
-plt.style.use('seaborn-v0_8')
-fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-fig.suptitle('Análise de Dinâmica Molecular - Lisozima', fontsize=16, fontweight='bold')
-
-# 1. RMSD (Root-Mean-Square Deviation)
-rmsd_data = read_xvg('rmsd.xvg')
-axes[0,0].plot(rmsd_data[:,0], rmsd_data[:,1], 'b-', linewidth=1.5)
-axes[0,0].set_xlabel('Tempo (ns)')
-axes[0,0].set_ylabel('RMSD (nm)')
-axes[0,0].set_title('RMSD do Backbone da Proteína')
-axes[0,0].grid(True, alpha=0.3)
-
-# 2. RMSF (Root-Mean-Square Fluctuation)
-rmsf_data = read_xvg('rmsf.xvg')
-axes[0,1].plot(rmsf_data[:,0], rmsf_data[:,1], 'r-', linewidth=1.5)
-axes[0,1].set_xlabel('Número do Resíduo')
-axes[0,1].set_ylabel('RMSF (nm)')
-axes[0,1].set_title('Flutuação por Resíduo (C-alpha)')
-axes[0,1].grid(True, alpha=0.3)
-
-# 3. Raio de Giração
-gyration_data = read_xvg('giracao.xvg')
-axes[1,0].plot(gyration_data[:,0], gyration_data[:,1], 'g-', linewidth=1.5)
-axes[1,0].set_xlabel('Tempo (ns)')
-axes[1,0].set_ylabel('Raio de Giração (nm)')
-axes[1,0].set_title('Raio de Giração da Proteína')
-axes[1,0].grid(True, alpha=0.3)
-
-# 4. Ligações de Hidrogênio
-hbond_data = read_xvg('hbond_intra.xvg')
-axes[1,1].plot(hbond_data[:,0], hbond_data[:,1], 'm-', linewidth=1.5)
-axes[1,1].set_xlabel('Tempo (ns)')
-axes[1,1].set_ylabel('Número de Ligações H')
-axes[1,1].set_title('Ligações de Hidrogênio Intramoleculares')
-axes[1,1].grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.savefig('analise_md_completa.png', dpi=300, bbox_inches='tight')
-plt.show()
-
-# Análise estatística básica
-print("=== RESUMO ESTATÍSTICO ===")
-print(f"RMSD médio: {np.mean(rmsd_data[:,1]):.3f} ± {np.std(rmsd_data[:,1]):.3f} nm")
-print(f"Raio de giração médio: {np.mean(gyration_data[:,1]):.3f} ± {np.std(gyration_data[:,1]):.3f} nm")
-print(f"Ligações H médias: {np.mean(hbond_data[:,1]):.1f} ± {np.std(hbond_data[:,1]):.1f}")
-```
-
-#### 8.6 Interpretação dos Resultados
+#### 8.5 Interpretação dos Resultados
 
 **RMSD (Root-Mean-Square Deviation):**
 
@@ -304,7 +242,10 @@ print(f"Ligações H médias: {np.mean(hbond_data[:,1]):.1f} ± {np.std(hbond_da
 - Tendência crescente indica possível desnaturação
 - Plateau indica estabilização da estrutura
 
-![Exemplo RMSD](https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=RMSD+vs+Tempo)
+Para gerar gráficos de exemplo, execute:
+```bash
+python gerar_graficos_exemplo.py
+```
 
 **RMSF (Root-Mean-Square Fluctuation):**
 
@@ -312,23 +253,17 @@ print(f"Ligações H médias: {np.mean(hbond_data[:,1]):.1f} ± {np.std(hbond_da
 - Folhas-β e α-hélices: baixa flexibilidade (<0.2 nm)
 - Picos indicam regiões móveis importantes
 
-![Exemplo RMSF](https://via.placeholder.com/600x400/2196F3/FFFFFF?text=RMSF+por+Resíduo)
-
 **Raio de Giração:**
 
 - Proteína compacta: ~1.4-1.6 nm para lisozima
 - Variações pequenas (<5%) indicam estabilidade
 - Aumentos significativos sugerem desdobramento
 
-![Exemplo Raio de Giração](https://via.placeholder.com/600x400/FF9800/FFFFFF?text=Raio+de+Giração+vs+Tempo)
-
 **Ligações de Hidrogênio:**
 
 - Lisozima: ~100-130 ligações H intramoleculares
 - Flutuações normais: ±10-15 ligações
 - Perdas significativas indicam instabilidade estrutural
-
-![Exemplo Ligações H](https://via.placeholder.com/600x400/9C27B0/FFFFFF?text=Ligações+H+vs+Tempo)
 
 ---
 
