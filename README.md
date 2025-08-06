@@ -9,7 +9,7 @@ Deixo um artigo de revisão sobre tutoriais de simulações em Dinâmica Molecul
 ```
 Lemkul, J. A. Introductory Tutorials for Simulating Protein Dynamics with GROMACS. J. Phys. Chem. B 2024, 128 (39), 9418-9435. DOI: 10.1021/acs.jpcb.4c04901
 ```
-Disponível para leitura em [PDF](lemkul-2024-introductory-tutorials-for-simulating-protein-dynamics-with-gromacs.pdf).
+Disponível para leitura em [PDF](https://pubs.acs.org/doi/pdf/10.1021/acs.jpcb.4c04901).
 
 ---
 
@@ -109,156 +109,124 @@ O GROMACS utiliza uma variedade de tipos de arquivos com extensões específicas
 
 ### 1. Preparação da Topologia da Proteína
 
-O primeiro passo é usar `gmx pdb2gmx` para ler o arquivo PDB, gerar uma topologia (`topol.top`) e um arquivo de coordenadas (`.gro`) compatível com o GROMACS. A topologia descreve as interações moleculares (ligações, ângulos, etc.) com base em um campo de força selecionado. O programa também adiciona átomos de hidrogênio que faltam na estrutura cristalina.
+O primeiro passo é usar `gmx pdb2gmx` para ler o arquivo PDB (aqui chamado `model.pdb`), gerar uma topologia (`topol.top`) e um arquivo de coordenadas (`.gro`) compatível com o GROMACS.
 
 ```bash
-# Selecione interativamente um campo de força (ex: CHARMM36) e um modelo de água correspondente (ex: TIP3P).
-gmx pdb2gmx -f 1AKI.pdb -o 1AKI_processed.gro -p topol.top -ignh -water tip3p
+# O GROMACS solicitará que você selecione um campo de força e um modelo de água da lista.
+gmx pdb2gmx -f model.pdb -o model_processed.gro -water spce -ignh
 ```
-- `-f`: Arquivo de entrada PDB.
-- `-o`: Arquivo de saída de coordenadas no formato GROMACS.
-- `-p`: Arquivo de saída da topologia do sistema.
-- `-water`: Especifica o modelo de água a ser usado, que deve ser compatível com o campo de força escolhido.
-- `-ignh`: Ignora os hidrogênios do PDB e os reconstrói, útil para evitar erros de nomenclatura.
-
-Este comando também cria o arquivo `posre.itp`, que contém definições para restrições de posição usadas durante a equilibração.
+- **Seleção Interativa:**
+  1.  Escolha um campo de força da lista (ex: `CHARMM36-jul2022`).
+  2.  Escolha o modelo de água correspondente (ex: `TIP3P`).
 
 ### 2. Definição da Caixa e Solvatação
 
-Primeiro, definimos uma caixa de simulação periódica em torno da proteína com `gmx editconf`. Em seguida, preenchemos o volume vazio dessa caixa com moléculas de água usando `gmx solvate`.
+Definimos uma caixa de simulação periódica e a preenchemos com moléculas de água.
 
 ```bash
-# Define uma caixa (ex: dodecaedro rômbico) a 1.2 nm da superfície da proteína.
-gmx editconf -f 1AKI_processed.gro -o 1AKI_box.gro -c -d 1.2 -bt dodecahedron
-```
-- `-c`: Centra a proteína na caixa.
-- `-d`: Define a distância mínima entre a proteína e a borda da caixa. 1.0-1.2 nm é um valor comum.
-- `-bt`: Define o tipo de caixa. O `dodecahedron` é mais eficiente em termos de volume que o `cubic` para solutos globulares, economizando custo computacional.
-
+# Define uma caixa cúbica a 1.0 nm da superfície da proteína.
+gmx editconf -f model_processed.gro -o model_newbox.gro -c -d 1.0 -bt cubic
 ```bash
-# Preenche a caixa com moléculas de água (spc216.gro é um arquivo genérico de solvente).
-gmx solvate -cp 1AKI_box.gro -cs spc216.gro -o 1AKI_solv.gro -p topol.top
+# Preenche a caixa com moléculas de água.
+gmx solvate -cp model_newbox.gro -cs spc216.gro -o model_solv.gro -p topol.top
 ```
-- `-cp`: Coordenadas do soluto (a caixa com a proteína).
-- `-cs`: Coordenadas do solvente.
-- `-p`: **Importante:** Atualiza automaticamente o arquivo `topol.top` com o número de moléculas de água adicionadas.
 
 ### 3. Adição de Íons
 
-Para neutralizar a carga total do sistema (um requisito para o algoritmo PME de cálculo de eletrostática) e simular condições iônicas fisiológicas, adicionamos íons.
+Neutralizamos a carga do sistema e adicionamos íons para simular uma concentração fisiológica.
 
 ```bash
-# Primeiro, crie um arquivo .tpr binário com o gmx grompp. Este arquivo contém toda a informação do sistema.
-gmx grompp -f ions.mdp -c 1AKI_solv.gro -p topol.top -o ions.tpr -maxwarn 1
-```
-- `ions.mdp`: Arquivo de parâmetros mínimo, pode estar vazio ou conter apenas `integrator = steep`.
-- O `grompp` combina coordenadas, topologia e parâmetros em um único arquivo de entrada binário `.tpr`.
-- `-maxwarn 1`: Permite ignorar avisos comuns nesta etapa.
-
+# Prepara o sistema para a adição de íons.
+gmx grompp -f ions.mdp -c model_solv.gro -p topol.top -o ions.tpr -maxwarn 5
 ```bash
-# Use gmx genion para substituir moléculas de água por íons.
-# O programa solicitará a seleção do grupo a ser substituído (geralmente "13 SOL" para a água).
-echo "SOL" | gmx genion -s ions.tpr -o 1AKI_solv_ions.gro -p topol.top -pname NA -nname CL -neutral
+# Adiciona íons Na+ e Cl- a uma concentração de 0.15 M e neutraliza a carga do sistema.
+gmx genion -s ions.tpr -o model_solv_ions.gro -p topol.top -neutral -conc 0.15 -pname NA -nname CL
 ```
-- `-s`: Arquivo de entrada `.tpr`.
-- `-pname` e `-nname`: Nomes do cátion e ânion, respectivamente.
-- `-neutral`: Adiciona automaticamente o número de contra-íons necessários para zerar a carga líquida do sistema.
-- `echo "SOL"`: Automatiza a seleção do grupo de solvente a ser substituído pelos íons.
+- **Seleção Interativa:** Quando solicitado, selecione o grupo de solvente a ser substituído pelos íons (geralmente `13 SOL`).
 
 ### 4. Minimização de Energia
 
-A minimização remove clivagens estéricas e geometrias desfavoráveis geradas durante a preparação do sistema, movendo os átomos para um mínimo de energia local. Isso garante um ponto de partida estável para a dinâmica.
+Remove clivagens estéricas e relaxa a geometria do sistema.
 
 ```bash
 # Prepara o sistema para a minimização.
-gmx grompp -f minim.mdp -c 1AKI_solv_ions.gro -p topol.top -o em.tpr
+gmx grompp -f minim.mdp -c model_solv_ions.gro -p topol.top -o em.tpr -maxwarn 5
 
 # Executa a minimização de energia.
-gmx mdrun -v -deffnm em
+gmx mdrun -v -deffnm em -s em.tpr
 ```
-- `-deffnm em`: Uma abreviação conveniente que define `em` como o nome base para todos os arquivos de entrada e saída (`em.tpr`, `em.log`, `em.gro`, etc.).
 
 ### 5. Equilibração NVT (Temperatura Constante)
 
-A primeira fase de equilibração estabiliza a temperatura do sistema. Restrições de posição são aplicadas aos átomos pesados da proteína para permitir que as moléculas de solvente se acomodem ao redor dela sem perturbar sua estrutura.
+Estabiliza a temperatura do sistema com restrições de posição na proteína.
 
 ```bash
 # Prepara o sistema para o equilíbrio NVT.
-gmx grompp -f nvt.mdp -c em.gro -r em.gro -p topol.top -o nvt.tpr
+gmx grompp -f nvt.mdp -c em.gro -p topol.top -o nvt.tpr -r em.gro -maxwarn 5
 
 # Executa o equilíbrio NVT.
-gmx mdrun -deffnm nvt
+gmx mdrun -deffnm nvt -v -s nvt.tpr
 ```
-- `-r em.gro`: Especifica as coordenadas de referência para as restrições de posição. As restrições são ativadas no arquivo `nvt.mdp` pela linha `define = -DPOSRES`, que por sua vez inclui o arquivo `posre.itp` na topologia.
 
 ### 6. Equilibração NPT (Pressão Constante)
 
-A segunda fase de equilibração estabiliza a pressão, ajustando o volume da caixa para atingir a densidade correta do sistema. As restrições de posição na proteína são mantidas.
+Estabiliza a pressão e a densidade do sistema, mantendo as restrições.
 
 ```bash
-# Prepara o sistema para o equilíbrio NPT, usando o estado final do NVT como ponto de partida.
-gmx grompp -f npt.mdp -c nvt.gro -r nvt.gro -t nvt.cpt -p topol.top -o npt.tpr
+# Prepara o sistema para o equilíbrio NPT.
+gmx grompp -f npt.mdp -c nvt.gro -t nvt.cpt -p topol.top -o npt.tpr -r em.gro -maxwarn 5
 
 # Executa o equilíbrio NPT.
-gmx mdrun -deffnm npt
+gmx mdrun -deffnm npt -v -s npt.tpr
 ```
-- `-c nvt.gro`: Usa as coordenadas finais da etapa NVT.
-- `-t nvt.cpt`: Usa o arquivo de checkpoint do NVT para uma continuação exata, preservando velocidades e estado do termostato/barostato.
 
 ### 7. Simulação Produtiva (MD)
 
-Após a equilibração, as restrições são removidas e a simulação é executada para coletar os dados que serão analisados. A duração depende do fenômeno de interesse, variando de nanossegundos (ns) a microssegundos (µs).
+Executa a simulação principal sem restrições para coletar dados.
 
 ```bash
 # Prepara o sistema para a simulação de produção.
-gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md.tpr
+gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_1.tpr -maxwarn 5
 
 # Executa a simulação produtiva.
-gmx mdrun -deffnm md
+gmx mdrun -deffnm md_0_1 -v
 ```
-- O arquivo `md.mdp` é semelhante ao `npt.mdp`, mas sem a linha `define = -DPOSRES`.
 
 ### 8. Pós-processamento e Análise de Resultados
 
-Antes da análise, é crucial corrigir os efeitos de borda periódica na trajetória para visualização e cálculo corretos. Use `gmx trjconv` para garantir que a proteína não apareça "quebrada" ou "pulando" na caixa.
+Analisa a trajetória gerada (`md_0_1.xtc`).
 
 #### 8.1 Cálculo do RMSF (Root-Mean-Square Fluctuation)
 
-Mede a flutuação de cada resíduo em torno de sua posição média, indicando as regiões mais flexíveis da proteína.
-
 ```bash
-# Selecione o grupo "C-alpha" (geralmente 3) para o cálculo.
-echo "C-alpha" | gmx rmsf -s md.tpr -f md.xtc -o rmsf.xvg -res
+# O GROMACS solicitará a seleção do grupo para o cálculo.
+gmx rmsf -s md_0_1.tpr -f md_0_1.xtc -o rmsf.xvg -res
 ```
-- `-res`: Calcula a flutuação por resíduo, não por átomo.
+- **Seleção Interativa:** Escolha `3 C-alpha`.
 
 #### 8.2 Cálculo do RMSD (Root-Mean-Square Deviation)
 
-Mede o desvio estrutural global da proteína ao longo do tempo em relação a uma estrutura de referência (ex: a estrutura inicial). É um indicador da estabilidade conformacional.
-
 ```bash
-# Selecione "Backbone" (esqueleto) para o ajuste e "Backbone" para o cálculo.
-echo "Backbone Backbone" | gmx rms -s md.tpr -f md.xtc -o rmsd.xvg -tu ns
+# O GROMACS solicitará a seleção do grupo para o ajuste e para o cálculo.
+gmx rms -s md_0_1.tpr -f md_0_1.xtc -o rmsd.xvg -tu ns
 ```
-- `-tu ns`: Exibe o tempo no eixo X em nanossegundos.
+- **Seleção Interativa:** Escolha `4 Backbone` para o ajuste e `4 Backbone` novamente para o cálculo.
 
 #### 8.3 Cálculo do Raio de Giração (Radius of Gyration)
 
-Mede a compactação da proteína. Aumentos no raio de giração podem indicar um processo de desdobramento (unfolding).
-
 ```bash
-# Selecione "Protein" (geralmente 1) para o cálculo.
-echo "Protein" | gmx gyrate -s md.tpr -f md.xtc -o giracao.xvg
+# O GROMACS solicitará a seleção do grupo para o cálculo.
+gmx gyrate -s md_0_1.tpr -f md_0_1.xtc -o giracao.xvg
 ```
+- **Seleção Interativa:** Escolha `1 Protein`.
 
 #### 8.4 Cálculo do Número de Ligações de Hidrogênio
 
-Analisa as ligações de hidrogênio, que são fundamentais para a manutenção da estrutura secundária e terciária da proteína.
-
 ```bash
-# Para ligações de H intramoleculares, selecione "Protein" duas vezes.
-echo "Protein Protein" | gmx hbond -s md.tpr -f md.xtc -num hbond_intra.xvg
+# O GROMACS solicitará a seleção de dois grupos para o cálculo.
+gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 ```
+- **Seleção Interativa:** Escolha `1 Protein` para o primeiro grupo e `1 Protein` novamente para o segundo.
 
 ---
 
@@ -283,21 +251,21 @@ echo "Protein Protein" | gmx hbond -s md.tpr -f md.xtc -num hbond_intra.xvg
     -   **Solução**: Refaça o passo problemático garantindo que a flag `-p` seja usada para atualizar a topologia.
 
 2.  **Mensagem `Water molecule cannot be settled` ou instabilidade na simulação (LINCS warnings)**
-    -   **Causa**: Uma geometria inicial muito ruim (após adicionar íons, por exemplo) ou um passo de tempo (`dt`) muito grande no arquivo `.mdp`.
-    -   **Solução**: Certifique-se de que a minimização de energia foi bem-sucedida. Se o erro persistir, reduza o `dt` no seu arquivo `.mdp` (ex: de 0.002 para 0.001) e tente novamente.
+    -   **Causa**: Uma geometria inicial muito ruim ou um passo de tempo (`dt`) muito grande no arquivo `.mdp`.
+    -   **Solução**: Certifique-se de que a minimização de energia foi bem-sucedida. Se o erro persistir, reduza o `dt` no seu arquivo `.mdp` (ex: de 0.002 para 0.001).
 
 3.  **Erro de `pdb2gmx` sobre nomes de átomos ou resíduos não reconhecidos**
-    -   **Causa**: O arquivo PDB contém nomes de átomos ou resíduos não padrão, ou hidrogênios com nomenclatura incorreta.
-    -   **Solução**: Use a flag `-ignh` para que o GROMACS reconstrua todos os hidrogênios. Se o erro for com átomos pesados, pode ser necessário editar o arquivo PDB manualmente para corrigir os nomes.
+    -   **Causa**: O arquivo PDB contém nomes de átomos ou resíduos não padrão.
+    -   **Solução**: Use a flag `-ignh` para que o GROMACS reconstrua todos os hidrogênios. Se o erro for com átomos pesados, pode ser necessário editar o arquivo PDB manualmente.
 
 4.  **Visualização "quebrada" da molécula no VMD/PyMOL**
-    -   **Causa**: Isso não é um erro, mas um artefato das condições de contorno periódicas. A molécula pode cruzar a fronteira da caixa.
-    -   **Solução**: Use `gmx trjconv` para processar a trajetória antes de visualizar. Centralize a proteína e torne as moléculas inteiras:
+    -   **Causa**: Artefato das condições de contorno periódicas.
+    -   **Solução**: Use `gmx trjconv` para processar a trajetória antes de visualizar:
         ```bash
-        # Selecione "Protein" para centrar e "System" para a saída.
-        echo "Protein System" | gmx trjconv -s md.tpr -f md.xtc -o md_whole.xtc -pbc whole
-        echo "Protein System" | gmx trjconv -s md.tpr -f md_whole.xtc -o md_final.xtc -pbc nojump -center
+        gmx trjconv -s md_0_1.tpr -f md_0_1.xtc -o md_whole.xtc -pbc whole
+        gmx trjconv -s md_0_1.tpr -f md_whole.xtc -o md_final.xtc -pbc nojump -center
         ```
+    - **Seleção Interativa:** Para ambos os comandos, selecione `1 Protein` para centrar e `0 System` para a saída.
 
 ---
 
@@ -306,6 +274,12 @@ echo "Protein Protein" | gmx hbond -s md.tpr -f md.xtc -num hbond_intra.xvg
 - Lemkul, J. A. *J. Phys. Chem. B* **2024**, *128*, 9418-9435.
 - [GROMACS Manual](http://www.gromacs.org/Documentation)
 - [MD Tutorials – Lysozyme in Water](https://www.mdtutorials.com/gmx/lysozyme/)
+
+---
+
+## Agradecimentos
+
+- Um agradecimento especial ao projeto *Making-It-Rain* de Pablo R. Arantes (@pablitoarantes), Marcelo D. Polêto (@mdpoleto), Conrado Pedebos (@ConradoPedebos) e Rodrigo Ligabue-Braun (@ligabue_braun), que permitiu a execução dos protocolos na nuvem com o Colab.
 
 ---
 
