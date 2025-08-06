@@ -276,12 +276,6 @@ gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 
 ---
 
-## Agradecimentos
-
-- Um agradecimento especial ao projeto *Making-It-Rain* de Pablo R. Arantes (@pablitoarantes), Marcelo D. Polêto (@mdpoleto), Conrado Pedebos (@ConradoPedebos) e Rodrigo Ligabue-Braun (@ligabue_braun), que permitiu a execução dos protocolos na nuvem com o Colab.
-
----
-
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
