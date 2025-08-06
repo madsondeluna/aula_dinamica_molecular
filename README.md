@@ -29,7 +29,6 @@ Disponível para leitura em [PDF](https://pubs.acs.org/doi/pdf/10.1021/acs.jpcb.
   - [6. Equilibração NPT (Pressão Constante)](#6-equilibração-npt-pressão-constante)
   - [7. Simulação Produtiva (MD)](#7-simulação-produtiva-md)
   - [8. Pós-processamento e Análise de Resultados](#8-pós-processamento-e-análise-de-resultados)
-- [Estrutura do Projeto](#estrutura-do-projeto)
 - [Como Executar o Tutorial](#como-executar-o-tutorial)
 - [Possíveis Erros e Soluções](#possíveis-erros-e-soluções)
 - [Referências](#referências)
