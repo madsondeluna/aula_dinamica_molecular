@@ -242,11 +242,6 @@ gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 - Tendência crescente indica possível desnaturação
 - Plateau indica estabilização da estrutura
 
-Para gerar gráficos de exemplo, execute:
-```bash
-python gerar_graficos_exemplo.py
-```
-
 **RMSF (Root-Mean-Square Fluctuation):**
 
 - Loops e terminais: alta flexibilidade (>0.3 nm)
