@@ -210,13 +210,26 @@ gmx rmsf -s md_0_1.tpr -f md_0_1.xtc -o rmsf.xvg -res
 ```
 - **Seleção Interativa:** Escolha `3 C-alpha`.
 
+**Exemplo de gráfico RMSF:**
+
+![Exemplo RMSF](imagens/rmsf_exemplo.png)
+
+*O gráfico mostra a flexibilidade de cada resíduo. Resíduos em vermelho indicam alta flexibilidade (>0.25 nm), típicos de loops e regiões móveis.*
+
 #### 8.2 Cálculo do RMSD (Root-Mean-Square Deviation)
 
 ```bash
 # O GROMACS solicitará a seleção do grupo para o ajuste e para o cálculo.
 gmx rms -s md_0_1.tpr -f md_0_1.xtc -o rmsd.xvg -tu ns
 ```
+
 - **Seleção Interativa:** Escolha `4 Backbone` para o ajuste e `4 Backbone` novamente para o cálculo.
+
+**Exemplo de gráfico RMSD:**
+
+![Exemplo RMSD](imagens/rmsd_exemplo.png)
+
+*O gráfico mostra o desvio da estrutura ao longo do tempo. A linha tracejada vermelha indica o valor médio. Um plateau estável indica boa convergência da simulação.*
 
 #### 8.3 Cálculo do Raio de Giração (Radius of Gyration)
 
@@ -224,7 +237,14 @@ gmx rms -s md_0_1.tpr -f md_0_1.xtc -o rmsd.xvg -tu ns
 # O GROMACS solicitará a seleção do grupo para o cálculo.
 gmx gyrate -s md_0_1.tpr -f md_0_1.xtc -o giracao.xvg
 ```
+
 - **Seleção Interativa:** Escolha `1 Protein`.
+
+**Exemplo de gráfico do Raio de Giração:**
+
+![Exemplo Raio de Giração](imagens/giracao_exemplo.png)
+
+*O gráfico mostra a compactação da proteína ao longo do tempo. A área sombreada azul representa ±1 desvio padrão. Baixa variação indica estabilidade estrutural.*
 
 #### 8.4 Cálculo do Número de Ligações de Hidrogênio
 
@@ -232,7 +252,28 @@ gmx gyrate -s md_0_1.tpr -f md_0_1.xtc -o giracao.xvg
 # O GROMACS solicitará a seleção de dois grupos para o cálculo.
 gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 ```
+
 - **Seleção Interativa:** Escolha `1 Protein` para o primeiro grupo e `1 Protein` novamente para o segundo.
+
+**Exemplo de gráfico de Ligações de Hidrogênio:**
+
+![Exemplo Ligações de Hidrogênio](imagens/hbond_exemplo.png)
+
+*O gráfico mostra o número de ligações de hidrogênio intramoleculares ao longo do tempo. A linha preta representa a média móvel, que ajuda a identificar tendências. Flutuações são normais e indicam a dinâmica natural da proteína.*
+
+#### 8.5 Gerando os Gráficos de Exemplo
+
+Para gerar gráficos semelhantes aos mostrados acima com seus próprios dados, você pode usar o script Python incluído:
+
+```bash
+# Instale as dependências (se necessário)
+pip install matplotlib numpy
+
+# Execute o script para gerar os gráficos
+python gerar_graficos_secao8.py
+```
+
+Este script criará gráficos de exemplo para cada análise, que podem ser usados como referência para interpretar seus próprios resultados.
 
 #### 8.5 Interpretação dos Resultados
 
