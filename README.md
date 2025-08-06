@@ -200,6 +200,9 @@ gmx mdrun -deffnm md_0_1 -v
 
 ### 8. Pós-processamento e Análise de Resultados
 
+> **Nota sobre os Exemplos de Imagens:** As imagens utilizadas como exemplos nesta seção foram retiradas do artigo: Andrade, F.A.d.; Luna-Aragão, M.A.d.; Ferreira, J.D.C.; Souza, F.F.; Rocha Oliveira, A.C.d.; Costa, A.F.d.; Aragão, F.J.L.; Santos-Silva, C.A.d.; Benko-Iseppon, A.M.; Pandolfi, V. *Deciphering Cowpea Resistance to Potyvirus: Assessment of eIF4E Gene Mutations and Their Impact on the eIF4E-VPg Protein Interaction*. Viruses **2025**, *17*, 1050. https://doi.org/10.3390/v17081050. 
+> Este trabalho utilizou técnicas de genômica, modelagem e dinâmica molecular, docking e análises avançadas de interações moleculares, sendo um excelente exemplo de aplicações das metodologias abordadas nesta aula. O artigo pode ser acessado em: https://www.mdpi.com/1999-4915/17/8/1050
+
 Analisa a trajetória gerada (`md_0_1.xtc`).
 
 #### 8.1 Cálculo do RMSF (Root-Mean-Square Fluctuation)
@@ -212,9 +215,9 @@ gmx rmsf -s md_0_1.tpr -f md_0_1.xtc -o rmsf.xvg -res
 
 **Exemplo de gráfico RMSF:**
 
-![Exemplo RMSF](imagens/rmsf_exemplo.png)
+![Exemplo RMSF](imagens/Figure5.jpg)
 
-*O gráfico mostra a flexibilidade de cada resíduo. Resíduos em vermelho indicam alta flexibilidade (>0.25 nm), típicos de loops e regiões móveis.*
+*O gráfico mostra a flexibilidade de cada resíduo. Resíduos com picos indicam alta flexibilidade (>0.25 nm), típicos de loops e regiões móveis.*
 
 #### 8.2 Cálculo do RMSD (Root-Mean-Square Deviation)
 
@@ -227,9 +230,9 @@ gmx rms -s md_0_1.tpr -f md_0_1.xtc -o rmsd.xvg -tu ns
 
 **Exemplo de gráfico RMSD:**
 
-![Exemplo RMSD](imagens/rmsd_exemplo.png)
+![Exemplo RMSD](imagens/Figure4.jpg)
 
-*O gráfico mostra o desvio da estrutura ao longo do tempo. A linha tracejada vermelha indica o valor médio. Um plateau estável indica boa convergência da simulação.*
+*O gráfico mostra o desvio da estrutura ao longo do tempo. Um plateau estável indica a convergência da simulação.*
 
 #### 8.3 Cálculo do Raio de Giração (Radius of Gyration)
 
@@ -242,9 +245,9 @@ gmx gyrate -s md_0_1.tpr -f md_0_1.xtc -o giracao.xvg
 
 **Exemplo de gráfico do Raio de Giração:**
 
-![Exemplo Raio de Giração](imagens/giracao_exemplo.png)
+![Exemplo Raio de Giração](imagens/Figure7jpg.jpg)
 
-*O gráfico mostra a compactação da proteína ao longo do tempo. A área sombreada azul representa ±1 desvio padrão. Baixa variação indica estabilidade estrutural.*
+*O gráfico mostra a compactação da proteína ao longo do tempo.*
 
 #### 8.4 Cálculo do Número de Ligações de Hidrogênio
 
@@ -257,9 +260,9 @@ gmx hbond -s md_0_1.tpr -f md_0_1.xtc -num hbond_intra.xvg
 
 **Exemplo de gráfico de Ligações de Hidrogênio:**
 
-![Exemplo Ligações de Hidrogênio](imagens/hbond_exemplo.png)
+![Exemplo Ligações de Hidrogênio](imagens/Figure6.jpg)
 
-*O gráfico mostra o número de ligações de hidrogênio intramoleculares ao longo do tempo. A linha preta representa a média móvel, que ajuda a identificar tendências. Flutuações são normais e indicam a dinâmica natural da proteína.*
+*O gráfico mostra o número de ligações de hidrogênio intramoleculares ao longo do tempo. Flutuações são normais e indicam a dinâmica natural da proteína.*
 
 #### 8.5 Interpretação dos Resultados
 
