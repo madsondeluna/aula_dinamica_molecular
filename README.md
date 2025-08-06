@@ -146,10 +146,13 @@ Neutralizamos a carga do sistema e adicionamos íons para simular uma concentra�
 ```bash
 # Prepara o sistema para a adição de íons.
 gmx grompp -f ions.mdp -c model_solv.gro -p topol.top -o ions.tpr -maxwarn 5
+```
+
 ```bash
 # Adiciona íons Na+ e Cl- a uma concentração de 0.15 M e neutraliza a carga do sistema.
 gmx genion -s ions.tpr -o model_solv_ions.gro -p topol.top -neutral -conc 0.15 -pname NA -nname CL
 ```
+
 - **Seleção Interativa:** Quando solicitado, selecione o grupo de solvente a ser substituído pelos íons (geralmente `13 SOL`).
 
 ### 4. Minimização de Energia
@@ -159,7 +162,9 @@ Remove clivagens estéricas e relaxa a geometria do sistema.
 ```bash
 # Prepara o sistema para a minimização.
 gmx grompp -f minim.mdp -c model_solv_ions.gro -p topol.top -o em.tpr -maxwarn 5
+```
 
+```bash
 # Executa a minimização de energia.
 gmx mdrun -v -deffnm em -s em.tpr
 ```
@@ -171,7 +176,9 @@ Estabiliza a temperatura do sistema com restrições de posição na proteína.
 ```bash
 # Prepara o sistema para o equilíbrio NVT.
 gmx grompp -f nvt.mdp -c em.gro -p topol.top -o nvt.tpr -r em.gro -maxwarn 5
+````
 
+```bash
 # Executa o equilíbrio NVT.
 gmx mdrun -deffnm nvt -v -s nvt.tpr
 ```
@@ -183,7 +190,9 @@ Estabiliza a pressão e a densidade do sistema, mantendo as restrições.
 ```bash
 # Prepara o sistema para o equilíbrio NPT.
 gmx grompp -f npt.mdp -c nvt.gro -t nvt.cpt -p topol.top -o npt.tpr -r em.gro -maxwarn 5
+```
 
+```bash
 # Executa o equilíbrio NPT.
 gmx mdrun -deffnm npt -v -s npt.tpr
 ```
@@ -195,7 +204,9 @@ Executa a simulação principal sem restrições para coletar dados.
 ```bash
 # Prepara o sistema para a simulação de produção.
 gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_1.tpr -maxwarn 5
+```
 
+```bash
 # Executa a simulação produtiva.
 gmx mdrun -deffnm md_0_1 -v
 ```
