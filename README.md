@@ -160,7 +160,7 @@ gmx solvate -cp ubiquitin_box.gro -cs spc216.gro -o ubiquitin_solv.gro -p topol.
 A ubiquitina possui carga líquida nula. Adicionamos 0.1 M de NaCl para simular condições fisiológicas:
 
 ```bash
-gmx grompp -f ions.mdp -c ubiquitin_solv.gro -p topol.top -o ions.tpr
+gmx grompp -f mdp/ions.mdp -c ubiquitin_solv.gro -p topol.top -o ions.tpr
 echo "SOL" | gmx genion -s ions.tpr -o ubiquitin_solv_ions.gro -p topol.top \
              -pname NA -nname CL -conc 0.1
 ```
@@ -169,7 +169,7 @@ echo "SOL" | gmx genion -s ions.tpr -o ubiquitin_solv_ions.gro -p topol.top \
 ### Passo 4: Minimização de Energia
 
 ```bash
-gmx grompp -f minim.mdp -c ubiquitin_solv_ions.gro -p topol.top -o em.tpr
+gmx grompp -f mdp/minim.mdp -c ubiquitin_solv_ions.gro -p topol.top -o em.tpr
 gmx mdrun -v -deffnm em
 ```
 
@@ -187,7 +187,7 @@ echo -e "11\n0" | gmx energy -f em.edr -o potential.xvg
 Estabiliza a temperatura a 298 K com restrições de posição na proteína:
 
 ```bash
-gmx grompp -f nvt.mdp -c em.gro -r em.gro -p topol.top -o nvt.tpr
+gmx grompp -f mdp/nvt.mdp -c em.gro -r em.gro -p topol.top -o nvt.tpr
 gmx mdrun -deffnm nvt -nb gpu
 ```
 
@@ -203,7 +203,7 @@ echo -e "16\n0" | gmx energy -f nvt.edr -o temperature.xvg
 Estabiliza a pressão a 1 bar (barostato C-rescale):
 
 ```bash
-gmx grompp -f npt.mdp -c nvt.gro -r em.gro -t nvt.cpt -p topol.top -o npt.tpr
+gmx grompp -f mdp/npt.mdp -c nvt.gro -r em.gro -t nvt.cpt -p topol.top -o npt.tpr
 gmx mdrun -deffnm npt -nb gpu
 ```
 
@@ -219,7 +219,7 @@ echo -e "17\n0" | gmx energy -f npt.edr -o pressure.xvg
 **Primeira metade (0–50 ns):**
 
 ```bash
-gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_50.tpr
+gmx grompp -f mdp/md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_50.tpr
 gmx mdrun -deffnm md_0_50 -nb gpu
 ```
 
