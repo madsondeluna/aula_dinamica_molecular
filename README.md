@@ -11,7 +11,6 @@ Lemkul, J. A. Introductory Tutorials for Simulating Protein Dynamics with GROMAC
 J. Phys. Chem. B 2024, 128 (39), 9418-9435. DOI: 10.1021/acs.jpcb.4c04901
 ```
 
----
 
 ## Como usar este material — Google Colab
 
@@ -40,7 +39,6 @@ Todos os tutoriais são executados no **Google Colab**, um ambiente virtual grat
 
 > **Importante:** O Colab é um ambiente temporário — os arquivos gerados durante a sessão são perdidos ao fechar o navegador. Se quiser guardar os resultados, faça o download ou salve no Google Drive antes de encerrar.
 
----
 
 ## Índice
 
@@ -54,7 +52,6 @@ Todos os tutoriais são executados no **Google Colab**, um ambiente virtual grat
 - [Possíveis Erros e Soluções](#possíveis-erros-e-soluções)
 - [Referências](#referências)
 
----
 
 ## Visão Geral
 
@@ -66,7 +63,6 @@ Os três exercícios cobrem fluxos de trabalho fundamentais em MD:
 | 2 | Complexo InaD:NorpA | 1IHJ | Complexo proteico com ligação dissulfeto intermolecular e grupos de cap |
 | 3 | Chignolin (β-hairpin) | 1UAO | Umbrella sampling e cálculo de energia livre (PMF/WHAM) |
 
----
 
 ## Campo de Força CHARMM36m
 
@@ -94,7 +90,6 @@ dispcorr        = no             ; sem correção de dispersão de longo alcance
 constraints     = h-bonds        ; apenas ligações com H são restritas
 ```
 
----
 
 ## Tipos de Arquivos GROMACS
 
@@ -111,7 +106,6 @@ constraints     = h-bonds        ; apenas ligações com H são restritas
 | `.trr`   | Arquivo de trajetória de alta precisão (tempo, caixa, coordenadas, velocidades, forças) |
 | `.cpt`   | Arquivo de checkpoint para reiniciar simulações |
 
----
 
 ## Exercício 1 — Proteína em Água (Ubiquitina)
 
@@ -127,7 +121,6 @@ Este é o exercício mais detalhado, cobrindo todo o fluxo de trabalho: prepara�
          → análise (RMSD, RMSF, ligações H, DSSP)
 ```
 
----
 
 ### Passo 1 — Preparação da Topologia
 
@@ -144,7 +137,6 @@ Arquivos gerados:
 - `topol.top` — topologia completa
 - `posre.itp` — restrições de posição para a equilibração
 
----
 
 ### Passo 2 — Definição da Caixa e Solvatação
 
@@ -162,7 +154,6 @@ gmx solvate -cp ubiquitin_box.gro -cs spc216.gro -o ubiquitin_solv.gro -p topol.
 
 > **Nota:** O arquivo `spc216.gro` (caixa de água pré-equilibrada) é utilizado para qualquer modelo de água de três pontos — o sistema converge para as propriedades do TIP3P durante a minimização e equilibração.
 
----
 
 ### Passo 3 — Adição de Íons
 
@@ -174,7 +165,6 @@ echo "SOL" | gmx genion -s ions.tpr -o ubiquitin_solv_ions.gro -p topol.top \
              -pname NA -nname CL -conc 0.1
 ```
 
----
 
 ### Passo 4 — Minimização de Energia
 
@@ -191,7 +181,6 @@ echo -e "11\n0" | gmx energy -f em.edr -o potential.xvg
 
 > Critério de convergência: força máxima < 500 kJ/mol/nm (`emtol = 500.0`).
 
----
 
 ### Passo 5 — Equilibração NVT (100 ps)
 
@@ -208,7 +197,6 @@ Para verificar a temperatura:
 echo -e "16\n0" | gmx energy -f nvt.edr -o temperature.xvg
 ```
 
----
 
 ### Passo 6 — Equilibração NPT (500 ps)
 
@@ -225,7 +213,6 @@ Para verificar a pressão:
 echo -e "17\n0" | gmx energy -f npt.edr -o pressure.xvg
 ```
 
----
 
 ### Passo 7 — Simulação Produtiva (50 ns + extensão para 100 ns)
 
@@ -243,7 +230,6 @@ gmx convert-tpr -s md_0_50.tpr -until 100000 -o md_50_100.tpr
 gmx mdrun -s md_50_100.tpr -deffnm md_50_100 -cpi md_0_50.cpt -noappend -nb gpu
 ```
 
----
 
 ### Passo 8 — Pós-processamento e Análise
 
@@ -296,7 +282,6 @@ echo -e "6\n6" | gmx hbond -s md_0_50.tpr -f md_fit.xtc -num hbond_backbone.xvg
 echo "1" | gmx dssp -s md_0_50.tpr -f md_fit.xtc -o dssp.dat
 ```
 
----
 
 ## Exercício 2 — Complexo Proteico em Água (InaD:NorpA)
 
@@ -318,7 +303,6 @@ gmx pdb2gmx -f 1ihj_chainAD_capped.pdb -o complex.gro -water tip3p -ter -merge a
 
 > Consulte o artigo original para o procedimento detalhado de preparação da estrutura com PyMOL.
 
----
 
 ## Exercício 3 — Umbrella Sampling (Chignolin)
 
@@ -346,7 +330,6 @@ make_ndx > name 3 Gly10_CA
 
 > Consulte o artigo original para o script Python de seleção de frames e as configurações completas do arquivo `.mdp` de pulling.
 
----
 
 ## Possíveis Erros e Soluções
 
@@ -376,7 +359,6 @@ make_ndx > name 3 Gly10_CA
      gmx mdrun -deffnm nvt -ntmpi 1
      ```
 
----
 
 ## Referências
 
@@ -385,7 +367,6 @@ make_ndx > name 3 Gly10_CA
 - GROMACS Manual: https://manual.gromacs.org/
 - CHARMM36m force field: http://mackerell.umaryland.edu/charmm_ff.shtml#gromacs
 
----
 
 ## Licença
 
