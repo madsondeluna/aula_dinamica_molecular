@@ -11,10 +11,39 @@ Os arquivos de input originais estão disponíveis em: https://github.com/Lemkul
 
 ---
 
+## Como usar este material — Google Colab
+
+> **Você não precisa instalar nada no seu computador.**
+
+Todos os tutoriais são executados no **Google Colab**, um ambiente virtual gratuito na nuvem fornecido pelo Google. O Colab funciona diretamente no navegador e oferece acesso a um computador Linux com suporte a GPU, sem qualquer configuração local.
+
+**O que você precisa:**
+- Uma conta Google (Gmail)
+- Navegador de internet (Chrome, Firefox, Edge)
+
+**Como abrir o notebook:**
+
+1. Clique no botão abaixo para abrir o notebook diretamente no Colab:
+
+   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/madsondeluna/aula_dinamica_molecular/blob/main/MD_GMX.ipynb)
+
+2. Faça login com sua conta Google se solicitado.
+
+3. **Ative a GPU** para acelerar as simulações:
+   - No menu superior: `Ambiente de execução` → `Alterar tipo de ambiente de execução`
+   - Em "Acelerador de hardware", selecione **GPU T4**
+   - Clique em **Salvar**
+
+4. Execute as células na ordem, clicando no botão ▶ de cada célula ou usando `Shift + Enter`.
+
+> **Importante:** O Colab é um ambiente temporário — os arquivos gerados durante a sessão são perdidos ao fechar o navegador. Se quiser guardar os resultados, faça o download ou salve no Google Drive antes de encerrar.
+
+---
+
 ## Índice
 
+- [Como usar este material — Google Colab](#como-usar-este-material--google-colab)
 - [Visão Geral](#visão-geral)
-- [Pré-requisitos](#pré-requisitos)
 - [Campo de Força CHARMM36m](#campo-de-força-charmm36m)
 - [Tipos de Arquivos GROMACS](#tipos-de-arquivos-gromacs)
 - [Exercício 1 — Proteína em Água (Ubiquitina)](#exercício-1--proteína-em-água-ubiquitina)
@@ -34,25 +63,6 @@ Os três exercícios cobrem fluxos de trabalho fundamentais em MD:
 | 1 | Ubiquitina em água | 1UBQ | Preparação, simulação e análise de uma proteína globular |
 | 2 | Complexo InaD:NorpA | 1IHJ | Complexo proteico com ligação dissulfeto intermolecular e grupos de cap |
 | 3 | Chignolin (β-hairpin) | 1UAO | Umbrella sampling e cálculo de energia livre (PMF/WHAM) |
-
----
-
-## Pré-requisitos
-
-- **GROMACS** 2024 ou superior
-- **Campo de Força CHARMM36m** (julho 2022) — download externo (ver abaixo)
-- **Python 3** com `matplotlib`, `numpy` e `pandas`
-- **VMD** ou **PyMOL** para visualização de trajetórias
-- **PyMOL** também é necessário no Exercício 2 (para adicionar grupos de cap)
-
-**Instalar GROMACS via conda (recomendado):**
-```bash
-conda install -c conda-forge gromacs
-```
-**Ou via apt:**
-```bash
-sudo apt-get install gromacs
-```
 
 ---
 
