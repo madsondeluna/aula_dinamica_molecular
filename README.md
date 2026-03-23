@@ -63,6 +63,10 @@ Os três exercícios cobrem fluxos de trabalho fundamentais em MD:
 | 2 | Complexo InaD:NorpA | 1IHJ | Complexo proteico com ligação dissulfeto intermolecular e grupos de cap |
 | 3 | Chignolin (β-hairpin) | 1UAO | Umbrella sampling e cálculo de energia livre (PMF/WHAM) |
 
+![Fluxo de trabalho geral dos tutoriais GROMACS](imagens/fig0_toc.png)
+
+*Visão geral do fluxo de trabalho dos tutoriais. Adaptado de Lemkul (2024), CC-BY 4.0.*
+
 
 ## Campo de Força CHARMM36m
 
@@ -154,6 +158,10 @@ gmx solvate -cp ubiquitin_box.gro -cs spc216.gro -o ubiquitin_solv.gro -p topol.
 
 > **Nota:** O arquivo `spc216.gro` (caixa de água pré-equilibrada) é utilizado para qualquer modelo de água de três pontos; o sistema converge para as propriedades do TIP3P durante a minimização e equilibração.
 
+![Ubiquitina solvatada em caixa dodecaédrica](imagens/fig1_ubiquitina_solvatada.png)
+
+*Figura 1: Sistema de ubiquitina solvatada. (A) Representação da caixa de simulação triclinica. (B) Forma dodecaédrica rômbica — mais eficiente em volume que a caixa cúbica. Extraído de Lemkul (2024), CC-BY 4.0.*
+
 
 ### Passo 3: Adição de Íons
 
@@ -180,6 +188,10 @@ echo -e "11\n0" | gmx energy -f em.edr -o potential.xvg
 ```
 
 > Critério de convergência: força máxima < 500 kJ/mol/nm (`emtol = 500.0`).
+
+![Energia potencial durante a minimização](imagens/fig2_minimizacao.png)
+
+*Figura 2: (A) Decaimento da energia potencial durante a minimização por descida mais íngreme. (B) Sobreposição da estrutura cristalográfica (cinza) com a estrutura minimizada (colorida). Extraído de Lemkul (2024), CC-BY 4.0.*
 
 
 ### Passo 5: Equilibração NVT (100 ps)
@@ -212,6 +224,10 @@ Para verificar a pressão:
 ```bash
 echo -e "17\n0" | gmx energy -f npt.edr -o pressure.xvg
 ```
+
+![Temperatura e pressão durante a equilibração](imagens/fig3_equilibracao.png)
+
+*Figura 3: (A) Temperatura estabilizada em 298 K durante o NVT. (B) Flutuações de pressão durante o NPT. Extraído de Lemkul (2024), CC-BY 4.0.*
 
 
 ### Passo 7: Simulação Produtiva (50 ns + extensão para 100 ns)
@@ -264,6 +280,10 @@ echo "3" | gmx rmsf -s md_0_50.tpr -f md_fit.xtc -o rmsf.xvg -res
 - Selecione **C-alpha**.
 - Picos indicam regiões flexíveis (loops e terminais).
 
+![RMSD e RMSF da ubiquitina](imagens/fig4_rmsd_rmsf.png)
+
+*Figura 4: (A) RMSD do backbone ao longo de 100 ns (linha preta: média corrida). (B) RMSF por resíduo — pico no resíduo 76 (C-terminal livre). Extraído de Lemkul (2024), CC-BY 4.0.*
+
 #### 8.4 Ligações de Hidrogênio
 
 ```bash
@@ -282,6 +302,10 @@ echo -e "6\n6" | gmx hbond -s md_0_50.tpr -f md_fit.xtc -num hbond_backbone.xvg
 echo "1" | gmx dssp -s md_0_50.tpr -f md_fit.xtc -o dssp.dat
 ```
 
+![Ligações de hidrogênio e estrutura secundária](imagens/fig5_hbond_dssp.png)
+
+*Figura 5: (A) Ligações de hidrogênio intramoleculares (preto) e proteína-água (azul) ao longo de 100 ns. (B) Conteúdo de estrutura secundária por tipo (DSSP). Extraído de Lemkul (2024), CC-BY 4.0.*
+
 
 ## Exercício 2: Complexo Proteico em Água (InaD:NorpA)
 
@@ -294,6 +318,10 @@ Este exercício expande o fluxo do Exercício 1 com os seguintes desafios adicio
 - Ligação dissulfeto **intermolecular** entre Cys31 (InaD) e Cys6 (NorpA)
 - Uso de `-merge` e `-ter` no `pdb2gmx`
 - Uso de `-neutral` no `genion` para neutralizar a carga líquida do complexo (−1)
+
+![Complexo InaD:NorpA](imagens/fig7_inad_norpa.png)
+
+*Figura 7: Estrutura do complexo InaD:NorpA (PDB: 1IHJ). A ligação dissulfeto intermolecular entre Cys31 (InaD) e Cys6 (NorpA) é mostrada em destaque. Extraído de Lemkul (2024), CC-BY 4.0.*
 
 **Comando de exemplo para pdb2gmx:**
 
@@ -308,6 +336,10 @@ gmx pdb2gmx -f 1ihj_chainAD_capped.pdb -o complex.gro -water tip3p -ter -merge a
 
 **Sistema:** Chignolin (β-hairpin de 10 resíduos), PDB: [1UAO](https://www.rcsb.org/structure/1UAO)
 
+![Chignolin com coordenada de reação](imagens/fig8_chignolin.png)
+
+*Figura 8: Estrutura do chignolin com a coordenada de reação definida entre os Cα de Gly1 e Gly10 (distância: 0.66 nm no estado dobrado). Extraído de Lemkul (2024), CC-BY 4.0.*
+
 Este exercício demonstra o uso de potencial de bias para calcular superfícies de energia livre (PMF) usando WHAM:
 
 1. **Preparação**: topologia e caixa dodecaédrica com `-box 7.0`
@@ -318,6 +350,10 @@ Este exercício demonstra o uso de potencial de bias para calcular superfícies 
 ```bash
 gmx wham -it tpr_files.dat -if pullf_files.dat -o pmf.xvg -hist hist.xvg -unit kJ
 ```
+
+![PMF e distribuição das janelas de umbrella](imagens/fig9_pmf.png)
+
+*Figura 9: (A) Perfil de energia livre (PMF) ao longo da coordenada de reação ξ. (B) Distribuição das 26 janelas de umbrella sampling. Extraído de Lemkul (2024), CC-BY 4.0.*
 
 **Grupos de índice para a coordenada de reação:**
 
