@@ -1,6 +1,8 @@
 # Tutoriais Introdutórios de Dinâmica Molecular com GROMACS
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/madsondeluna/aula_dinamica_molecular/blob/main/MD_GMX.ipynb)
+<a href="https://colab.research.google.com/github/madsondeluna/aula_dinamica_molecular/blob/main/MD_GMX.ipynb" target="_blank">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 
 > **Clique no botão acima para abrir e executar o tutorial diretamente no seu navegador, sem instalar nada.**
 
@@ -26,7 +28,9 @@ Todos os tutoriais são executados no **Google Colab**, um ambiente virtual grat
 
 1. Clique no botão abaixo para abrir o notebook diretamente no Colab:
 
-   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/madsondeluna/aula_dinamica_molecular/blob/main/MD_GMX.ipynb)
+   <a href="https://colab.research.google.com/github/madsondeluna/aula_dinamica_molecular/blob/main/MD_GMX.ipynb" target="_blank">
+     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+   </a>
 
 2. Faça login com sua conta Google se solicitado.
 
