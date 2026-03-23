@@ -1,13 +1,15 @@
 # Tutoriais Introdutórios de Dinâmica Molecular com GROMACS
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/madsondeluna/aula_dinamica_molecular/blob/main/MD_GMX.ipynb)
+
+> **Clique no botão acima para abrir e executar o tutorial diretamente no seu navegador — sem instalar nada.**
+
 Este repositório contém três tutoriais práticos para simulação de dinâmica molecular (MD) de proteínas utilizando o GROMACS, baseados no artigo:
 
 ```
 Lemkul, J. A. Introductory Tutorials for Simulating Protein Dynamics with GROMACS.
 J. Phys. Chem. B 2024, 128 (39), 9418-9435. DOI: 10.1021/acs.jpcb.4c04901
 ```
-
-Os arquivos de input originais estão disponíveis em: https://github.com/Lemkul-Lab/gmx_tutorials_jpcb
 
 ---
 
