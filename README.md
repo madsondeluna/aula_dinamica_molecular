@@ -124,7 +124,7 @@ Este é o exercício mais detalhado, cobrindo todo o fluxo de trabalho: prepara�
 ### Fluxo de Trabalho
 
 ```
-1UBQ.pdb → topologia → caixa dodecaédrica → solvatação → adição de íons
+1UBQ.pdb → topologia → caixa cúbica → solvatação → adição de íons
          → minimização → NVT (100 ps) → NPT (500 ps) → MD (50+50 ns)
          → análise (RMSD, RMSF, ligações H, DSSP)
 ```
@@ -148,10 +148,10 @@ Arquivos gerados:
 
 ### Passo 2: Definição da Caixa e Solvatação
 
-Definimos uma **caixa dodecaédrica rômbica** (mais eficiente que a cúbica, com menor volume e mesma distância periódica):
+Definimos uma **caixa cúbica** com distância proteína-borda de 1.2 nm:
 
 ```bash
-gmx editconf -f ubiquitin.gro -o ubiquitin_box.gro -c -d 1.2 -bt dodecahedron
+gmx editconf -f ubiquitin.gro -o ubiquitin_box.gro -c -d 1.2 -bt cubic
 ```
 
 Solvatação com água TIP3P:
@@ -162,9 +162,9 @@ gmx solvate -cp ubiquitin_box.gro -cs spc216.gro -o ubiquitin_solv.gro -p topol.
 
 > **Nota:** O arquivo `spc216.gro` (caixa de água pré-equilibrada) é utilizado para qualquer modelo de água de três pontos; o sistema converge para as propriedades do TIP3P durante a minimização e equilibração.
 
-![Ubiquitina solvatada em caixa dodecaédrica](imagens/fig1_ubiquitina_solvatada.png)
+![Ubiquitina solvatada em caixa cúbica](imagens/fig1_ubiquitina_solvatada.png)
 
-*Figura 1: Sistema de ubiquitina solvatada. (A) Representação da caixa de simulação triclinica. (B) Forma dodecaédrica rômbica — mais eficiente em volume que a caixa cúbica. Extraído de Lemkul (2024), CC-BY 4.0.*
+*Figura 1: Sistema de ubiquitina solvatada com caixa cúbica. Extraído de Lemkul (2024), CC-BY 4.0.*
 
 
 ### Passo 3: Adição de Íons
@@ -346,7 +346,7 @@ gmx pdb2gmx -f 1ihj_chainAD_capped.pdb -o complex.gro -water tip3p -ter -merge a
 
 Este exercício demonstra o uso de potencial de bias para calcular superfícies de energia livre (PMF) usando WHAM:
 
-1. **Preparação**: topologia e caixa dodecaédrica com `-box 7.0`
+1. **Preparação**: topologia e caixa cúbica com `-box 7.0`
 2. **Pulling**: separação do Cα de Gly1 ao Cα de Gly10 (taxa: 0.005 nm/ps, k: 2000 kJ/mol/nm²)
 3. **Janelas de umbrella**: 26 janelas de 0.5 a 3.0 nm (espaçamento: 0.1 nm)
 4. **Análise WHAM**:
