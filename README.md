@@ -311,66 +311,6 @@ echo "1" | gmx dssp -s md_0_50.tpr -f md_fit.xtc -o dssp.dat
 *Figura 5: (A) Ligações de hidrogênio intramoleculares (preto) e proteína-água (azul) ao longo de 100 ns. (B) Conteúdo de estrutura secundária por tipo (DSSP). Extraído de Lemkul (2024), CC-BY 4.0.*
 
 
-## Exercício 2: Complexo Proteico em Água (InaD:NorpA)
-
-**Sistema:** Complexo InaD:NorpA (domínio PDZ de InaD com peptídeo NorpA), PDB: [1IHJ](https://www.rcsb.org/structure/1IHJ)
-
-Este exercício expande o fluxo do Exercício 1 com os seguintes desafios adicionais:
-- Extração de cadeias específicas de um arquivo PDB com múltiplas cadeias
-- Modelagem de grupos de cap (ACE/NME) para termini incompletos com PyMOL
-- Reconstrução de átomos de cadeias laterais ausentes
-- Ligação dissulfeto **intermolecular** entre Cys31 (InaD) e Cys6 (NorpA)
-- Uso de `-merge` e `-ter` no `pdb2gmx`
-- Uso de `-neutral` no `genion` para neutralizar a carga líquida do complexo (−1)
-
-![Complexo InaD:NorpA](imagens/fig7_inad_norpa.png)
-
-*Figura 7: Estrutura do complexo InaD:NorpA (PDB: 1IHJ). A ligação dissulfeto intermolecular entre Cys31 (InaD) e Cys6 (NorpA) é mostrada em destaque. Extraído de Lemkul (2024), CC-BY 4.0.*
-
-**Comando de exemplo para pdb2gmx:**
-
-```bash
-gmx pdb2gmx -f 1ihj_chainAD_capped.pdb -o complex.gro -water tip3p -ter -merge all
-```
-
-> Consulte o artigo original para o procedimento detalhado de preparação da estrutura com PyMOL.
-
-
-## Exercício 3: Umbrella Sampling (Chignolin)
-
-**Sistema:** Chignolin (β-hairpin de 10 resíduos), PDB: [1UAO](https://www.rcsb.org/structure/1UAO)
-
-![Chignolin com coordenada de reação](imagens/fig8_chignolin.png)
-
-*Figura 8: Estrutura do chignolin com a coordenada de reação definida entre os Cα de Gly1 e Gly10 (distância: 0.66 nm no estado dobrado). Extraído de Lemkul (2024), CC-BY 4.0.*
-
-Este exercício demonstra o uso de potencial de bias para calcular superfícies de energia livre (PMF) usando WHAM:
-
-1. **Preparação**: topologia e caixa cúbica com `-box 7.0`
-2. **Pulling**: separação do Cα de Gly1 ao Cα de Gly10 (taxa: 0.005 nm/ps, k: 2000 kJ/mol/nm²)
-3. **Janelas de umbrella**: 26 janelas de 0.5 a 3.0 nm (espaçamento: 0.1 nm)
-4. **Análise WHAM**:
-
-```bash
-gmx wham -it tpr_files.dat -if pullf_files.dat -o pmf.xvg -hist hist.xvg -unit kJ
-```
-
-![PMF e distribuição das janelas de umbrella](imagens/fig9_pmf.png)
-
-*Figura 9: (A) Perfil de energia livre (PMF) ao longo da coordenada de reação ξ. (B) Distribuição das 26 janelas de umbrella sampling. Extraído de Lemkul (2024), CC-BY 4.0.*
-
-**Grupos de índice para a coordenada de reação:**
-
-```
-make_ndx > r 1 & a CA
-make_ndx > name 2 Gly1_CA
-make_ndx > r 10 & a CA
-make_ndx > name 3 Gly10_CA
-```
-
-> Consulte o artigo original para o script Python de seleção de frames e as configurações completas do arquivo `.mdp` de pulling.
-
-
 ## Possíveis Erros e Soluções
 
 1. **`Fatal error: number of coordinates in coordinate file does not match topology`**
